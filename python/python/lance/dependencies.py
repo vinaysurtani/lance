@@ -28,6 +28,7 @@ _CAGRA_AVAILABLE = True
 _RAFT_COMMON_AVAILABLE = True
 _HUGGING_FACE_AVAILABLE = True
 _TENSORFLOW_AVAILABLE = True
+_PYDANTIC_AVAILABLE = True
 
 
 class _LazyModule(ModuleType):
@@ -173,6 +174,7 @@ else:
     torch, _TORCH_AVAILABLE = _lazy_import("torch")
     datasets, _HUGGING_FACE_AVAILABLE = _lazy_import("datasets")
     tensorflow, _TENSORFLOW_AVAILABLE = _lazy_import("tensorflow")
+    _, _PYDANTIC_AVAILABLE = _lazy_import("pydantic")
 
 
 @lru_cache(maxsize=None)
@@ -221,6 +223,12 @@ def _check_for_tensorflow(obj: Any, *, check_type: bool = True) -> bool:
     )
 
 
+def _check_for_pydantic(obj: Any, *, check_type: bool = True) -> bool:
+    return _PYDANTIC_AVAILABLE and _might_be(
+        cast("Hashable", type(obj) if check_type else obj), "pydantic"
+    )
+
+
 __all__ = [
     # lazy-load third party libs
     "datasets",
@@ -234,6 +242,7 @@ __all__ = [
     "_check_for_numpy",
     "_check_for_pandas",
     "_check_for_polars",
+    "_check_for_pydantic",
     "_check_for_tensorflow",
     "_check_for_torch",
     "_LazyModule",
@@ -241,6 +250,7 @@ __all__ = [
     "_NUMPY_AVAILABLE",
     "_PANDAS_AVAILABLE",
     "_POLARS_AVAILABLE",
+    "_PYDANTIC_AVAILABLE",
     "_TORCH_AVAILABLE",
     "_HUGGING_FACE_AVAILABLE",
     "_TENSORFLOW_AVAILABLE",
