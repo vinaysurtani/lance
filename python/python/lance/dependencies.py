@@ -223,10 +223,12 @@ def _check_for_tensorflow(obj: Any, *, check_type: bool = True) -> bool:
     )
 
 
-def _check_for_pydantic(obj: Any, *, check_type: bool = True) -> bool:
-    return _PYDANTIC_AVAILABLE and _might_be(
-        cast("Hashable", type(obj) if check_type else obj), "pydantic"
-    )
+def _is_pydantic_base_model(obj: Any) -> bool:
+    if not _PYDANTIC_AVAILABLE:
+        return False
+    from pydantic import BaseModel
+
+    return isinstance(obj, BaseModel)
 
 
 __all__ = [
@@ -242,9 +244,9 @@ __all__ = [
     "_check_for_numpy",
     "_check_for_pandas",
     "_check_for_polars",
-    "_check_for_pydantic",
     "_check_for_tensorflow",
     "_check_for_torch",
+    "_is_pydantic_base_model",
     "_LazyModule",
     # exported flags/guards
     "_NUMPY_AVAILABLE",
